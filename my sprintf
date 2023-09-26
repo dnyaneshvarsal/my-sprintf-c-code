@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <string.h>
+char posting_data_buffer[50];
+
+  char *Batt_volt_str = "{\"batt_volt\":";
+  char *BattVoltStr= "\"2440\"";
+  char *display_init_status_str = ",\"display_init_status\":";
+  char *display_init_success_status = "\"1\"}";
+  
+char *str_array[] = {"data1 string", "data2 string","data3 string","data4 string"};//this will statically allocate memory to char pointer and we can avoid using malloc
+int no_array_elements;
+
+void my_sprintf(char **str, int no_array_elements);
+
+int main ()
+{
+  printf ("Hello World\r\n");
+
+  str_array[0]= Batt_volt_str;
+  str_array[1]= BattVoltStr;
+  str_array[2]= display_init_status_str;
+  str_array[3]= display_init_success_status;
+  
+  no_array_elements = (int)(sizeof (str_array) / sizeof (str_array[0]));
+  printf("no_array_elements=%d\r\n",no_array_elements);
+  my_sprintf(str_array, no_array_elements);
+
+  return 0;
+}
+
+  void my_sprintf(char **str, int no_array_elements)//this function will concatenate
+{
+  char *pBuffer = NULL;
+  pBuffer = &posting_data_buffer[0];//trick - this will allocate memory to char pointer without using malloc function
+  for (int i = 0; i < no_array_elements; i++)
+    {
+      memcpy (pBuffer, str[i], strlen (str[i]));
+      printf ("pBuffer=%s\r\n", pBuffer);
+    //   printf ("pBuffer ADDRESS =0x%X\r\n", pBuffer);
+      pBuffer = pBuffer + strlen (str[i]);
+    }
+     printf("posting_data_buffer=%s\r\n",posting_data_buffer);
+  pBuffer = NULL;
+}
